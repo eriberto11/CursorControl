@@ -12,7 +12,7 @@ namespace cursorLocker
     {
           public void tcMethod(Object gg)
         {
-            Console.Write("In timer fuckers \n");
+           // Console.Write("\nIn timer fuckers \n");
             Form1 fi = (Form1)gg;
             fi.setCursorLock();
         }

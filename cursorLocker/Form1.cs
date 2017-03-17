@@ -22,6 +22,19 @@ namespace cursorLocker
         public Form1()
         {
             InitializeComponent();
+            setupInts(); 
+        }
+        private void setupInts()
+        {
+            centerX = cursorLocker.Properties.Settings.Default.centerX;
+            centerY = cursorLocker.Properties.Settings.Default.centerY;
+
+            SizeOfLock = cursorLocker.Properties.Settings.Default.sizeOfLimit;
+
+            Console.Write("Loading vars : y=" + cursorLocker.Properties.Settings.Default.centerY);
+            numericUpDown1.Value = centerX;
+            numericUpDown2.Value = centerY;
+            numericUpDown3.Value = SizeOfLock;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -46,12 +59,25 @@ namespace cursorLocker
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //  Application.Exit();
-            Console.Write("writing X= "+centerX+" Y="+centerY+" size= "+SizeOfLock+"\n");
-           // this.Cursor = new Cursor(Cursor.Current.Handle);
-            Cursor.Clip = new Rectangle(centerX - (int)SizeOfLock/2, centerY - (int)SizeOfLock/2, SizeOfLock , SizeOfLock );
-          //  this.TopMost = true;
-            isLocked = true;
+
+            if (!isLocked)
+            {
+                //  Application.Exit();
+                Console.Write("Setting X= " + centerX + " Y=" + centerY + " size= " + SizeOfLock + "\n");
+                // this.Cursor = new Cursor(Cursor.Current.Handle);
+                Cursor.Clip = new Rectangle(centerX - (int)SizeOfLock / 2, centerY - (int)SizeOfLock / 2, SizeOfLock, SizeOfLock);
+                //  this.TopMost = true;
+                isLocked = true;
+              //  button2.Text = "Release Lock";
+                //button2.Update();
+            }
+            else
+            {
+                //button2.Text = "Set Cursor Lock";
+                //button2.Update();
+                isLocked = false;
+                Cursor.Clip = new Rectangle();
+            }
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -60,6 +86,8 @@ namespace cursorLocker
             {
                 NumericUpDown nu =(NumericUpDown) sender;
                 centerX = (int)nu.Value;
+                cursorLocker.Properties.Settings.Default.centerX=centerX;
+                cursorLocker.Properties.Settings.Default.Save();
             }
         
         }
@@ -70,6 +98,8 @@ namespace cursorLocker
             {
                 NumericUpDown nU = (NumericUpDown)sender;
                 centerY = (int)nU.Value;
+                cursorLocker.Properties.Settings.Default.centerY = centerY;
+                cursorLocker.Properties.Settings.Default.Save();
             }
         }
 
@@ -79,7 +109,8 @@ namespace cursorLocker
             {
                 NumericUpDown nu = (NumericUpDown)sender;
                 SizeOfLock = (int)nu.Value;
-         
+                cursorLocker.Properties.Settings.Default.sizeOfLimit = SizeOfLock;
+                cursorLocker.Properties.Settings.Default.Save();
             }
         }
 
@@ -94,14 +125,23 @@ namespace cursorLocker
         }
         public void setCursorLock()
         {
+
             if(centerX==0 ||centerY==0 || SizeOfLock == 0)
             {
-
+                Console.Write("In setcursorLock, center etc =0\n");
             }
             else
             {
-                if(isLocked==true)
-                Cursor.Clip = new Rectangle(centerX - (int)SizeOfLock / 2, centerY - (int)SizeOfLock / 2, SizeOfLock, SizeOfLock);
+                if (isLocked == true)
+                {
+             //       Console.Write("In setcursorLock, TRUE\n");
+                    Cursor.Clip = new Rectangle(centerX - (int)SizeOfLock / 2, centerY - (int)SizeOfLock / 2, SizeOfLock, SizeOfLock);
+
+                }else
+                {
+
+           //         Console.Write("In setcursorLock, FALSE\n");
+                }
             }
         }
     }
